@@ -1,5 +1,10 @@
 # language: Python 3.11, file: bot.py
-# yemek ihbar botu — sipariş + adres + 5 dk bekle + onay
+import sys, types
+try:
+    import audioop
+except ImportError:
+    sys.modules["audioop"] = types.ModuleType("audioop")
+
 import os, asyncio, discord
 from datetime import datetime, timezone
 from discord import app_commands
@@ -209,4 +214,4 @@ async def on_ready():
 if __name__ == "__main__":
     if not TOKEN:
         raise SystemExit("DISCORD_TOKEN eksik")
-    bot.run(TOKEN)               
+    bot.run(TOKEN)
