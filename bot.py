@@ -1,9 +1,11 @@
 # language: Python 3.11, file: bot.py
 import sys, types
-try:
-    import audioop
-except ImportError:
-    sys.modules["audioop"] = types.ModuleType("audioop")
+
+if "audioop" not in sys.modules:
+    try:
+        import audioop
+    except ImportError:
+        sys.modules["audioop"] = types.ModuleType("audioop")
 
 import os, asyncio, discord
 from datetime import datetime, timezone
