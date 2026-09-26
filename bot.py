@@ -11,7 +11,7 @@ load_dotenv()
 TOKEN          = os.getenv("DISCORD_TOKEN")
 GUILD_ID       = int(os.getenv("GUILD_ID", "1532403639115845742"))
 ADMIN_ID       = int(os.getenv("ADMIN_ID", "1518482876566605877"))
-VIP_CHANNEL_ID = int(os.getenv("VIP_CHANNEL_ID", "1553356836693090447"))
+VIP_CHANNEL_ID = int(os.getenv("VIP_CHANNEL_ID", "1553383142377914389"))
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,8 +40,6 @@ async def log_admin(user, guild, siparis, odeme, adres):
         pass
 
 
-# ===== ADRES MODAL =====
-
 class AdresModal(discord.ui.Modal, title="📍 Adres Bilgisi"):
     adres = discord.ui.TextInput(
         label="Adres",
@@ -57,7 +55,6 @@ class AdresModal(discord.ui.Modal, title="📍 Adres Bilgisi"):
     async def on_submit(self, i):
         await i.response.defer(thinking=True, ephemeral=True)
 
-        # 1. mesaj — sipariş alındı
         e1 = discord.Embed(
             title="🍔 SİPARİŞ ALINDI",
             description=(
@@ -73,14 +70,11 @@ class AdresModal(discord.ui.Modal, title="📍 Adres Bilgisi"):
         e1.set_footer(text="/Asayissube — Yemek İhbar Sistemi")
         await i.followup.send(embed=e1, ephemeral=True)
 
-        # admin'e bildir
         await log_admin(i.user, i.guild, self.siparis, self.odeme,
                         self.adres.value)
 
-        # 5 dakika bekle
         await asyncio.sleep(300)
 
-        # 2. mesaj — sipariş oluşturuldu
         e2 = discord.Embed(
             title="✅ SİPARİŞ OLUŞTURULDU",
             description=(
@@ -102,8 +96,6 @@ class AdresModal(discord.ui.Modal, title="📍 Adres Bilgisi"):
             pass
 
 
-# ===== ADRES BUTONU =====
-
 class AdresView(discord.ui.View):
     def __init__(self, siparis, odeme):
         super().__init__(timeout=300)
@@ -116,8 +108,6 @@ class AdresView(discord.ui.View):
             AdresModal(siparis=self.siparis, odeme=self.odeme)
         )
 
-
-# ===== YEMEK MODAL =====
 
 class YemekModal(discord.ui.Modal, title="🍔 Yemek İhbar"):
     siparis = discord.ui.TextInput(
@@ -147,8 +137,6 @@ class YemekModal(discord.ui.Modal, title="🍔 Yemek İhbar"):
             ephemeral=True,
         )
 
-
-# ===== PANEL =====
 
 class PanelView(discord.ui.View):
     def __init__(self):
@@ -221,4 +209,4 @@ async def on_ready():
 if __name__ == "__main__":
     if not TOKEN:
         raise SystemExit("DISCORD_TOKEN eksik")
-    bot.run(TOKEN)
+    bot.run(TOKEN)               
